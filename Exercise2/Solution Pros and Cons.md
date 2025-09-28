@@ -104,3 +104,30 @@
     /health/flightlookupService - to check if API is responding
     /health/database - to check the DB connectivity
     /health/externalDependency - if any needed
+
+    If management of AKS is difficult and need is not too much we can switch back to app service for that too.
+
+    ** High Availability **
+    Global Load Balance with Azure Traffic Manager
+    Multi region deployment
+    Geo-replicated Cosmos DB
+    High performance premium tier Redis cache
+    Comprehensive monitoring with health checks and app insight
+
+    ** Security **
+    Private endpoints for cosmos DB with no public access. (Data always remains in Azure backbone)
+    APIGEE onboarding of clients with certs and enterprise level OAuth 2.0 security
+    Managed identity to access internal components (System managed)
+    Enforce TLS 2.0 for transport layer security
+    Have a firewall too but external with Private Endpoint it may not be used
+    VNET with seperate subnets and an extensive NSG rule list to control access
+
+    ** Scaling parameters **
+    Auto scaling of Azure app services. Select initial tier based on estimated load
+    Horizontal scaling of AKS pods starting with minimum 3 as it gives best results and scale up to 10
+        consider Memory utilization
+        CPU utilization
+        backlog size for requests
+    Redis cache hit ratio
+    Cosmos DB RU (Read units) used and if there is any hot partitioning (unusual high volume of requests wrt other partitions)
+        use GUID as partition key for better order of msgs to be processed one after another until ARRIVE
