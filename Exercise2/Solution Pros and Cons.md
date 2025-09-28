@@ -91,4 +91,16 @@
 
     I want to emphasize the role of Arzure Traffic Manager (ATM) here since it holds significance for golbal availability, performance based automatic routing and diaster recovery as whole.
 
-    We set it up with two Azure regions e.g. EAST US and WEST US.
+    We set it up with two Azure regions e.g. EAST US and WEST US.We can choose any non US location or add more regions too.
+
+    ATM advantages:
+    1. Single endpoint for clients like flightlookup.trafficmanger.aa
+    2. Multi region deployment with each hosting an independednt lookup and update service, each having 10 pods
+    3. Automatic failover based on dynamic health of servcie endpoints
+    4. Health check monitoring for each region
+    5. Geographically closest region routing of request for low latency.
+
+    Health check configuration and alerting to team for faster response.
+    /health/flightlookupService - to check if API is responding
+    /health/database - to check the DB connectivity
+    /health/externalDependency - if any needed
