@@ -1,0 +1,35 @@
+sequenceDiagram
+    participant EventHub as Flight Status Event Hub
+    participant StatusService as Flight Status Service
+    participant EventProc as Event Processing Layer
+    participant BizLogic as Business Logic Engine
+    participant SabreAPI as Sabre Web Services
+    participant NotifOrch as Notification Orchestrator
+    participant NotifHub as Notification Hub
+    participant Passenger as AA App/SMS
+
+    EventHub->>EventProc: Flight cancellation or delay event
+    EventProc->>StatusService: Validate cancellation reason
+    StatusService-->>EventProc: Reason code for cancellation
+    alt Maintenance or Crew Issue
+        EventProc->>BizLogic: Process cancellation
+        BizLogic->>SabreAPI: Get checked-in passengers
+        SabreAPI-->>BizLogic: Passenger list with reservation codes
+        BizLogic->>SabreAPI: Check flight availability (same destination)
+        SabreAPI-->>BizLogic: Available flights response
+        alt No more nonstop flights available
+            BizLogic->>NotifOrch: Trigger hotel voucher notifications
+            loop For each eligible passenger
+                NotifOrch->>NotifHub: Send hotel voucher notification
+                NotifHub->>Passenger: Hotel voucher (AA App/SMS)
+                NotifHub-->>NotifOrch: Notification status
+            end
+            NotifOrch-->>BizLogic: Batch completion status
+            BizLogic-->>Gate: Update status (optional)
+            BizLogic-->>Gate: Send a list of Failed notification
+        else Alternative flights available
+            BizLogic->>BizLogic: Skip notification process
+        end
+    else Weather Cancellation
+        EventProc->>EventProc: Skip processing
+    end
