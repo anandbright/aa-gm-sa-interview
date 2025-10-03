@@ -72,11 +72,13 @@ namespace FlightServiceTest
                 Assert.Equal(origin, flight.getOrigin());
                 Assert.Equal(destination, flight.getDestination());
 
-                Assert.Throws<ArgumentException>( () => {
+                Assert.Throws<ArgumentException>( () =>
+                {
                     flight = new Flight(id, date, 10000, origin, destination, status, new DateTimeOffset(2025, 9, 22, 10, 5, 0, new TimeSpan(7, 0, 0)), new DateTimeOffset(2025, 9, 22, 12, 15, 0, new TimeSpan(5, 0, 0)));
                     flight = new Flight(id, date, -1, origin, destination, status, new DateTimeOffset(2025, 9, 22, 10, 5, 0, new TimeSpan(7, 0, 0)), new DateTimeOffset(2025, 9, 22, 12, 15, 0, new TimeSpan(5, 0, 0)));
                     flight = new Flight(id, date, number, "AB!", destination, status, new DateTimeOffset(2025, 9, 22, 10, 5, 0, new TimeSpan(7, 0, 0)), new DateTimeOffset(2025, 9, 22, 12, 15, 0, new TimeSpan(5, 0, 0)));
                     flight = new Flight(id, date, number, origin, "DE&", status, new DateTimeOffset(2025, 9, 22, 10, 5, 0, new TimeSpan(7, 0, 0)), new DateTimeOffset(2025, 9, 22, 12, 15, 0, new TimeSpan(5, 0, 0)));
+                    flight = new Flight(id, date, number, origin, "def", status, new DateTimeOffset(2025, 9, 22, 10, 5, 0, new TimeSpan(7, 0, 0)), new DateTimeOffset(2025, 9, 22, 12, 15, 0, new TimeSpan(5, 0, 0)));
                 });
             }
         }
